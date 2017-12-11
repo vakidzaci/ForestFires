@@ -9,6 +9,7 @@ from sklearn.ensemble import ExtraTreesRegressor
 from sklearn.feature_selection import RFE
 from functions import remove_outlier
 from functions import remove_outlier_h
+from functions import ret_error
 
 from sklearn.metrics import mean_squared_error
 from sklearn.metrics import mean_absolute_error
@@ -92,8 +93,16 @@ reg = RandomForestRegressor(
 reg.fit(x_train, y_train)
 y_predict = reg.predict(x_test)
 errors(y_test,y_predict)
-l = range(1,len(y_test)+1)
 
-plt.plot(l,y_test)
-plt.plot(l,y_predict)
-plt.show()
+
+
+# res = pd.read_csv('../result.csv')
+# d = pd.DataFrame(columns=['algorithm', 'mean_squared_error',
+#                             'mean_absolute_error',
+#                             'r2_score',
+#                             'median_absolute_error',
+#                             'explained_variance_score'])
+# d = pd.DataFrame(ret_error('rf',y_test,y_predict))
+# res.append(d)
+# res.to_csv('result.csv')
+

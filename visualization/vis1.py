@@ -2,34 +2,9 @@ import numpy
 import pandas
 
 from sklearn.feature_selection import RFE
+import matplotlib.pyplot as plt
 from sklearn.ensemble import ExtraTreesRegressor
 
-from pandas.plotting import scatter_matrix
-import matplotlib.pyplot as plt
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.linear_model import LinearRegression
-from sklearn.linear_model import Ridge
-from sklearn.linear_model import Lasso
-from sklearn.linear_model import ElasticNet
-from sklearn.ensemble import BaggingRegressor
-from sklearn.ensemble import RandomForestRegressor
-from sklearn.ensemble import ExtraTreesRegressor
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.neighbors import KNeighborsRegressor
-from sklearn.svm import SVR
-from sklearn.metrics import explained_variance_score
-from sklearn.metrics import mean_absolute_error
-from keras.models import Sequential
-from keras.layers import Dense
-from keras.layers import Dropout
-from keras.utils import np_utils
-from keras.constraints import maxnorm
-from sklearn.preprocessing import MinMaxScaler
-from sklearn.metrics import mean_squared_error
-from keras.wrappers.scikit_learn import KerasRegressor
-from sklearn.model_selection import cross_val_score
-from sklearn.model_selection import KFold
-from sklearn.preprocessing import StandardScaler
 
 # fix random seed for reproducibility
 seed = 7
@@ -74,18 +49,18 @@ dataframe.hist()
 dataframe.plot(kind='density', subplots=True, layout=(4,4), sharex=False, sharey=False)
 dataframe.plot(kind='box', subplots=True, layout=(4,4), sharex=False, sharey=False)
 
-scatter_matrix(dataframe)
+# scatter_matrix(dataframe)
 
 #CORRELATION
-fig = plt.figure()
-ax = fig.add_subplot(111)
-cax = ax.matshow(dataframe.corr(), vmin=-1, vmax=1)
-fig.colorbar(cax)
-ticks = numpy.arange(0,13,1)
-ax.set_xticks(ticks)
-ax.set_yticks(ticks)
-ax.set_xticklabels(dataframe.columns)
-ax.set_yticklabels(dataframe.columns)
+# fig = plt.figure()
+# ax = fig.add_subplot(111)
+# cax = ax.matshow(dataframe.corr(), vmin=-1, vmax=1)
+# fig.colorbar(cax)
+# ticks = numpy.arange(0,13,1)
+# ax.set_xticks(ticks)
+# ax.set_yticks(ticks)
+# ax.set_xticklabels(dataframe.columns)
+# ax.set_yticklabels(dataframe.columns)
 
 plt.show()
 

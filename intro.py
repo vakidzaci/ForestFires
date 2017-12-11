@@ -1,14 +1,16 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+from functions import remove_outlier_h
 data = pd.read_csv("forestfires.csv")
 import math
 
 #CORELATION
-# f,ax = plt.subplots(figsize=(18, 18))
-# sns.heatmap(data.corr(), annot=True, linewidths=.5, fmt= '.1f',ax=ax)
-#
-# plt.show()
+f,ax = plt.subplots(figsize=(18, 18))
+data = remove_outlier_h(data,'area',0.83)
+sns.heatmap(data.corr(), annot=True, linewidths=.5, fmt= '.1f',ax=ax)
+
+plt.show()
 
 #
 # # Line Plot
@@ -45,3 +47,4 @@ data1.plot()
 
 
 plt.show()
+

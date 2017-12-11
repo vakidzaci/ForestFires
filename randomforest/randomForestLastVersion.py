@@ -59,7 +59,7 @@ err4 = []
 out = []
 for i in range(75,100):
     out.append(float(i)/100)
-    d = remove_outlier_h(data,'area',0.83)
+    d = remove_outlier_h(data,'area',float(i)/100)
     y = d.area
     plt.show()
     y = d.area
@@ -106,8 +106,10 @@ def normalization(data):
 # err2 = normalization(err2)
 # err3 = normalization(err3)
 # err4 = normalization(err4)
-
+plt.subplot(2,1,1)
 plt.plot(out,err,label='mean_squared_error')
+plt.legend()
+plt.subplot(2,1,2)
 plt.plot(out,err1,label='mean_absolute_error')
 plt.plot(out,err2,label='r2_score')
 plt.plot(out,err3,label='median_absolute_error')

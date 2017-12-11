@@ -8,7 +8,7 @@ data.month.replace(('jan','feb','mar','apr','may','jun','jul','aug','sep','oct',
 data.day.replace(('mon','tue','wed','thu','fri','sat','sun'),(1,2,3,4,5,6,7), inplace=True)
 
 
-d = fnc.remove_outlier_h(data,'area',0.83)
+d = fnc.remove_outlier_h(data,'area',0.9)
 y = d.area
 plt.title("Burned area in ha")
 plt.ylabel("Frequency")

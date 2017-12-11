@@ -70,10 +70,10 @@ for i in range(75,100,1):
 
 
 def normalization(data):
-    data = np.array(data)
-    data = ((data - np.mean(data)) /
-               np.std(data))
-    data = pd.DataFrame(data)
+    # data = np.array(data)
+    # data = ((data - np.mean(data)) /
+    #            np.std(data))
+    # data = pd.DataFrame(data)
     return data
 
 
@@ -83,10 +83,16 @@ err2 = normalization(err2)
 err3 = normalization(err3)
 err4 = normalization(err4)
 plt.xticks(out)
+plt.subplot(3,1,1)
 plt.plot(out, err, label='mean_squared_error')
+plt.legend(loc='lower left')
+plt.subplot(3,1,2)
+
 plt.plot(out, err1, label='mean_absolute_error')
-plt.plot(out, err2, label='r2_score')
 plt.plot(out, err3, label='median_absolute_error')
+plt.legend(loc='lower left')
+plt.subplot(3,1,3)
+plt.plot(out, err2, label='r2_score')
 plt.plot(out, err4, label='explained_variance_score')
 plt.legend(loc='lower left')
 plt.show()

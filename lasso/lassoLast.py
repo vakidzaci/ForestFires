@@ -2,12 +2,10 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.svm import SVR
+from sklearn.linear_model import Lasso
 from sklearn.model_selection import train_test_split
 from functions import errors
-from sklearn.model_selection import cross_val_score
 from functions import remove_outlier_h
-from functions import ret_error
 from sklearn.metrics import mean_squared_error
 from sklearn.metrics import mean_absolute_error
 from sklearn.metrics import r2_score
@@ -32,36 +30,39 @@ labels = [
 ]
 data.drop(labels= labels,axis= 1,inplace =True)
 
-data = remove_outlier_h(data,'area',0.83)
-y = data.area
-x = data.drop(labels=['area'], axis=1)
+d = remove_outlier_h(data, 'area',0.85)
+y = d.area
+x = d.drop(labels=['area'], axis=1)
 x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=10, test_size=0.3)
 
 
 
-reg = SVR(kernel='rbf',
-          degree=1,
-          gamma='auto',
-          coef0=0.0,
-          tol=0.001,
-          C=1.0,
-          epsilon=2,
-          shrinking=True,
-          cache_size=200,
-          verbose=False,
-          max_iter=-1)
+err = []
+err1 = []
+err2 = []
+err3 = []
+err4 = []
+out = []
+
+
+reg = Lasso(alpha=0.2,
+            fit_intercept=True,
+            normalize=False,
+            precompute=False,
+            copy_X=True,
+            max_iter=1000,
+            tol=0.0001,
+            warm_start=False,
+            positive=False,
+            random_state=None,
+            selection='cyclic')
 reg.fit(x_train, y_train)
 y_predict = reg.predict(x_test)
+err.append(mean_squared_error(y_test, y_predict))
+err1.append(mean_absolute_error(y_test, y_predict))
+err2.append(r2_score(y_test, y_predict))
+err3.append(median_absolute_error(y_test, y_predict))
+err4.append(explained_variance_score(y_test, y_predict))
 errors(y_test, y_predict)
+print("*******************************************************")
 
-# res = pd.read_csv("../result.csv")
-#
-res = pd.DataFrame(columns=['algorithm','mean_squared_error',
-                            'mean_absolute_error',
-                            'r2_score',
-                            'median_absolute_error',
-                            'explained_variance_score'])
-
-res.loc[res.shape[0]] = ret_error('svr',y_test,y_predict)
-
-res.to_csv('../result.csv')
