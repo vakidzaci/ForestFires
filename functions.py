@@ -16,16 +16,16 @@ def ret_error(y_test,y_pred):
     return mean_squared_error(y_test,y_pred),mean_absolute_error(y_test,y_pred),r2_score(y_test,y_pred),median_absolute_error(y_test,y_pred),explained_variance_score(y_test,y_pred)
 
 def remove_outlier(df_in, col_name):
-    q1 = df_in[col_name].quantile(0.01)
-    q3 = df_in[col_name].quantile(0.98)
+    q1 = df_in[col_name].quantile(0)
+    q3 = df_in[col_name].quantile(0.83)
     iqr = q3-q1 #Interquartile range
     fence_low  = q1-1.5*iqr
     fence_high = q3+1.5*iqr
     df_out = df_in.loc[(df_in[col_name] > fence_low) & (df_in[col_name] < fence_high)]
     return df_out
 def remove_outlier_y(df_in):
-    q1 = df_in.quantile(0.01)
-    q3 = df_in.quantile(0.9)
+    q1 = df_in.quantile(0)
+    q3 = df_in.quantile(0.83)
     iqr = q3-q1 #Interquartile range
     fence_low  = q1-1.5*iqr
     fence_high = q3+1.5*iqr
@@ -37,3 +37,12 @@ def plot_act_pred(y_test,y_pred):
     plt.plot(l,y_test)
     plt.plot(l,y_pred)
     plt.show()
+
+def remove_outlier_h(df_in, col_name,h):
+    q1 = df_in[col_name].quantile(0)
+    q3 = df_in[col_name].quantile(h)
+    iqr = q3-q1 #Interquartile range
+    fence_low  = q1-1.5*iqr
+    fence_high = q3+1.5*iqr
+    df_out = df_in.loc[(df_in[col_name] > fence_low) & (df_in[col_name] < fence_high)]
+    return df_out

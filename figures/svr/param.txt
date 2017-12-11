@@ -1,0 +1,4 @@
+best remove outlier 0.83
+svr:
+	epsilon best 2
+		

@@ -2,7 +2,7 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.neural_network import MLPRegressor
+from sklearn.svm import SVR
 from sklearn.model_selection import train_test_split
 from functions import errors
 from functions import remove_outlier_h
@@ -15,21 +15,24 @@ data = pd.read_csv("../forestfires.csv")
 data.month.replace(('jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'),(1,2,3,4,5,6,7,8,9,10,11,12), inplace=True)
 data.day.replace(('mon','tue','wed','thu','fri','sat','sun'),(1,2,3,4,5,6,7), inplace=True)
 labels = [
-    'X',
-    'Y',
-    'month',
-    'day',
-    'FFMC',
-    'DMC',
-    'DC',
+    # 'X',
+    # 'Y',
+    # 'month',
+    # 'day',
+    # 'FFMC',
+    # 'DMC',
+    # 'DC',
     # 'ISI',
     # 'temp',
     # 'RH',
     # 'wind',
-    'rain'
+    # 'rain'
 ]
-data.drop(labels= labels,axis= 1,inplace =True)
-
+data = remove_outlier_h(data,'area',0.83)
+y = data.area
+x = data.drop(labels=['area'], axis=1)
+# data.drop(labels= labels,axis= 1,inplace =True)
+x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=10, test_size=0.3)
 
 err = []
 err1 = []
@@ -38,36 +41,23 @@ err3 = []
 err4 = []
 out = []
 
-for i in range(75,100,1):
-    w = float(i) / 100
-    print(w)
-    out.append(w)
-    d = remove_outlier_h(data, 'area',w)
-    y = d.area
-    x = d.drop(labels=['area'], axis=1)
-    x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=10, test_size=0.3)
+for i in range(1,30,1):
+    e = float(i)
+    out.append(e)
+    print(e)
 
-    reg = MLPRegressor(hidden_layer_sizes=(100, ),
-                       activation='relu',
-                       solver='adam',
-                       alpha=0.0001,
-                       batch_size='auto',
-                       learning_rate='constant',
-                       learning_rate_init=0.001,
-                       power_t=0.5,
-                       max_iter=200,
-                       shuffle=True,
-                       random_state=None,
-                       tol=0.0001,
-                       verbose=False,
-                       warm_start=False,
-                       momentum=0.9,
-                       nesterovs_momentum=True,
-                       early_stopping=False,
-                       validation_fraction=0.1,
-                       beta_1=0.9,
-                       beta_2=0.999,
-                       epsilon=1e-08)
+
+    reg = SVR(kernel='rbf',
+              degree=1,
+              gamma='auto',
+              coef0=0.0,
+              tol=0.001,
+              C=1.0,
+              epsilon=e,
+              shrinking=True,
+              cache_size=200,
+              verbose=False,
+              max_iter=-1)
     reg.fit(x_train, y_train)
     y_predict = reg.predict(x_test)
     err.append(mean_squared_error(y_test, y_predict))
@@ -77,6 +67,7 @@ for i in range(75,100,1):
     err4.append(explained_variance_score(y_test, y_predict))
     errors(y_test, y_predict)
     print("*******************************************************")
+
 
 
 def normalization(data):
@@ -92,14 +83,12 @@ err1 = normalization(err1)
 err2 = normalization(err2)
 err3 = normalization(err3)
 err4 = normalization(err4)
-# plt.xticks(out)
-plt.subplot(2,1,1)
+plt.xticks(out)
+plt.xlabel("epsilon")
 plt.plot(out, err, label='mean_squared_error')
-plt.legend(loc='upper left')
-plt.subplot(2,1,2)
 plt.plot(out, err1, label='mean_absolute_error')
 plt.plot(out, err2, label='r2_score')
 plt.plot(out, err3, label='median_absolute_error')
 plt.plot(out, err4, label='explained_variance_score')
-plt.legend(loc='upper left')
+plt.legend(loc='upper right')
 plt.show()
